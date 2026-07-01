@@ -1,35 +1,336 @@
-body {
-    font-family: Arial;
+/* ==========================
+   ESTILOS GENERALES
+========================== */
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
     background-color: #0f172a;
     color: white;
+
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-}
 
-.contenedor {
-    background-color: #1e293b;
+    min-height: 100vh;
     padding: 20px;
-    border-radius: 10px;
-    width: 300px;
 }
 
-input {
+/* ==========================
+   CONTENEDOR
+========================== */
+
+.contenedor{
+    background-color: #1e293b;
+
     width: 100%;
-    margin-bottom: 10px;
-    padding: 5px;
+    max-width: 420px;
+
+    padding: 30px;
+    border-radius: 15px;
+
+    box-shadow: 0 10px 25px rgba(0,0,0,.35);
+
+    position: relative; /* necesario para posicionar el destello del botón */
 }
 
-button {
+/* ==========================
+   TÍTULOS
+========================== */
+
+h1{
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 2rem;
+}
+
+h2{
+    margin-top: 25px;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 1.4rem;
+}
+
+/* ==========================
+   ETIQUETAS
+========================== */
+
+label{
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 6px;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+/* ==========================
+   CAJAS DE TEXTO
+========================== */
+
+input{
     width: 100%;
-    padding: 10px;
-    background-color: #22c55e;
+    padding: 12px;
+
     border: none;
-    color: white;
-    cursor: pointer;
+    border-radius: 8px;
+
+    font-size: 1rem;
+    outline: none;
+
+    margin-bottom: 10px;
 }
 
-button:hover {
+/* ==========================
+   BOTÓN
+========================== */
+
+button{
+    width: 100%;
+
+    margin-top: 15px;
+
+    padding: 14px;
+
+    border: none;
+    border-radius: 8px;
+
+    background-color: #22c55e;
+
+    color: white;
+
+    font-size: 1rem;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: .3s;
+
+    position: relative; /* punto de origen de la explosión de monedas */
+    z-index: 1;
+}
+
+button:hover{
     background-color: #16a34a;
+}
+
+/* ==========================
+   RESULTADOS
+========================== */
+
+p{
+    margin: 10px 0;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+span{
+    color: #38bdf8;
+    font-weight: bold;
+}
+
+/* ======================================================
+   EFECTO "RECOMPENSA" — LLUVIA DE MONEDAS
+   ====================================================== */
+
+/* Capa global donde vuelan todas las monedas y el destello */
+#lluviaMonedas{
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 9999;
+    perspective: 900px; /* da profundidad real a rotateX/rotateY */
+}
+
+/* --- Destello dorado que sale del botón --- */
+.destello{
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: url("spark.png") center / contain no-repeat;
+    transform: translate(-50%, -50%) scale(0);
+    filter: drop-shadow(0 0 12px gold);
+    animation: destelloAnim .5s ease-out forwards;
+}
+
+@keyframes destelloAnim{
+    0%{
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 1;
+    }
+    40%{
+        transform: translate(-50%, -50%) scale(3);
+        opacity: 1;
+    }
+    100%{
+        transform: translate(-50%, -50%) scale(6);
+        opacity: 0;
+    }
+}
+
+/* --- Moneda individual --- */
+.moneda{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: url("coin.png") center / contain no-repeat;
+    will-change: transform, opacity, filter;
+    animation-name: explotarMoneda;
+    animation-timing-function: cubic-bezier(.25,.8,.35,1);
+    animation-fill-mode: forwards;
+    transform-style: preserve-3d;
+}
+
+/* Tamaños: pequeña / mediana / grande, con blur de profundidad */
+.moneda.small{
+    width: 22px;
+    height: 22px;
+    filter: drop-shadow(0 4px 4px rgba(0,0,0,.4)) blur(.3px);
+}
+.moneda.medium{
+    width: 34px;
+    height: 34px;
+    filter: drop-shadow(0 6px 6px rgba(0,0,0,.4));
+}
+.moneda.large{
+    width: 46px;
+    height: 46px;
+    filter: drop-shadow(0 8px 8px rgba(0,0,0,.45)) brightness(1.05);
+}
+
+/* La trayectoria/rotación real de cada moneda se define por
+   variables CSS inline (--tx, --ty, --rot, --dur, --delay) que
+   pone el JS, así cada una de las 40 monedas es distinta. */
+@keyframes explotarMoneda{
+    0%{
+        transform:
+            translate(-50%, -50%)
+            translate3d(0, 0, 0)
+            rotateX(0deg) rotateY(0deg) rotate(0deg)
+            scale(0);
+        opacity: 1;
+    }
+    12%{
+        transform:
+            translate(-50%, -50%)
+            translate3d(calc(var(--tx) * 0.35), calc(var(--ty) * 0.25 - 10px), 40px)
+            rotateX(180deg) rotateY(120deg) rotate(calc(var(--rot) * 0.3))
+            scale(1);
+        opacity: 1;
+    }
+    55%{
+        transform:
+            translate(-50%, -50%)
+            translate3d(var(--tx), calc(var(--ty) - 60px), 10px)
+            rotateX(540deg) rotateY(380deg) rotate(calc(var(--rot) * 0.75))
+            scale(.9);
+        opacity: 1;
+    }
+    100%{
+        transform:
+            translate(-50%, -50%)
+            translate3d(calc(var(--tx) * 1.15), calc(var(--ty) + 140px), -20px)
+            rotateX(900deg) rotateY(720deg) rotate(var(--rot))
+            scale(.6);
+        opacity: 0;
+    }
+}
+
+/* --- Brillo dorado del resultado total al terminar --- */
+.brillo-total{
+    animation: popBrillo 1s ease-out;
+}
+
+@keyframes popBrillo{
+    0%{
+        transform: scale(1);
+        text-shadow: none;
+    }
+    35%{
+        transform: scale(1.15);
+        text-shadow: 0 0 10px gold, 0 0 20px gold, 0 0 30px #ffd700;
+        color: #ffd700;
+    }
+    100%{
+        transform: scale(1);
+        text-shadow: none;
+        color: #38bdf8;
+    }
+}
+
+/* ==========================
+   TABLETS
+========================== */
+
+@media (max-width:768px){
+
+    .contenedor{
+        max-width: 500px;
+        padding: 25px;
+    }
+
+    h1{
+        font-size: 1.8rem;
+    }
+
+    h2{
+        font-size: 1.3rem;
+    }
+
+    input,
+    button{
+        font-size: 1rem;
+    }
+
+}
+
+/* ==========================
+   CELULARES
+========================== */
+
+@media (max-width:480px){
+
+    body{
+        padding: 15px;
+        align-items: flex-start;
+    }
+
+    .contenedor{
+        width: 100%;
+        padding: 20px;
+        border-radius: 12px;
+    }
+
+    h1{
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+    }
+
+    h2{
+        font-size: 1.2rem;
+    }
+
+    label{
+        font-size: .95rem;
+    }
+
+    input{
+        padding: 11px;
+        font-size: .95rem;
+    }
+
+    button{
+        padding: 13px;
+        font-size: 1rem;
+    }
+
+    p{
+        font-size: .95rem;
+    }
+
 }

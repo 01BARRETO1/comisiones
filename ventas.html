@@ -1,12 +1,22 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Calculadora de Comisiones</title>
     <link rel="stylesheet" href="ventas.css">
     <script src="ventas.js"></script>
+    <script src="utilitarios.js"></script>
+    <script src="monedas.js" defer></script>
 </head>
+
 <body>
+    <div id="lluviaMonedas"></div>
+
+    <audio id="sndMonedas" preload="auto">
+        <source src="coin.mp3" type="audio/mpeg">
+    </audio>
 
     <div class="contenedor">
         <h1>Calculadora de Comisiones</h1>
@@ -20,7 +30,7 @@
         <label>Precio del producto:</label>
         <input type="text" id="txtPrecio">
 
-        <button onclick="calcular();">Calcular Comisión</button>
+        <button id="btnCalcular" onclick="calcular(); celebrarComision(this, document.getElementById('spTotal'));">Calcular Comisión</button>
 
         <h2>Resultados</h2>
         <p>Salario Base: <span id="spSueldoBase"></span></p>
@@ -28,6 +38,7 @@
         <p>Total: <span id="spTotal"></span></p>
     </div>
 
-    
+
 </body>
+
 </html>
