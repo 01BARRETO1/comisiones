@@ -158,6 +158,13 @@ span{
     animation: destelloAnim .5s ease-out forwards;
 }
 
+.mensaje-error {
+  color: red;
+  font-style: italic;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
 @keyframes destelloAnim{
     0%{
         transform: translate(-50%, -50%) scale(0);

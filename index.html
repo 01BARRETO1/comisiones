@@ -22,20 +22,24 @@
         <h1>Calculadora de Comisiones</h1>
 
         <label>Salario Base:</label>
-        <input type="text" id="txtSueldoBase">
+        <input id="txtSueldoBase" onblur="validarInput('txtSueldoBase', 'errorSueldoBase')">
+        <div id="errorSueldoBase" class="mensaje-error"></div>
 
         <label>Número de ventas:</label>
-        <input type="text" id="txtVentas">
+        <input id="txtVentas" onblur="validarInput('txtVentas', 'errorVentas')">
+        <div id="errorVentas" class="mensaje-error"></div>
 
         <label>Precio del producto:</label>
-        <input type="text" id="txtPrecio">
+        <input id="txtPrecio" onblur="validarInput('txtPrecio', 'errorPrecio')">
+        <div id="errorPrecio" class="mensaje-error"></div>
 
         <button id="btnCalcular" onclick="calcular(); celebrarComision(this, document.getElementById('spTotal'));">Calcular Comisión</button>
-
+        
         <h2>Resultados</h2>
         <p>Salario Base: <span id="spSueldoBase"></span></p>
         <p>Comisión: <span id="spComision"></span></p>
         <p>Total: <span id="spTotal"></span></p>
+        <button id="btnRest" onclick="reset();">limpiar</button>
     </div>
 
 
