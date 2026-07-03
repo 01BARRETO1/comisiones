@@ -146,7 +146,7 @@ function reset() {
     let sonido = new Audio("cha-ching.mp3");
     sonido.play();
     sonido.loop = false;   // no repetir
-    sonido.volume = 0.03;   // volumen 
+    sonido.volume = 0.5;   // volumen 
 }
 
 function limpiarResultados() {
